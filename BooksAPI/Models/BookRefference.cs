@@ -8,5 +8,6 @@
         public int Rating { get; set; }
         public string ISBN { get; set; }
         public DateTime PublicationDate { get; set; }
+        public IList<BookAuthor> BookAuthors { get; set; }
     }
 }

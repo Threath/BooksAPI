@@ -2,12 +2,15 @@
 {
     public class AuthorRefference
     {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
+        public int Id { get; set; } = 0;
+        public string FirstName { get; set; } = 0;
 
-        public string LastName { get; set; }
+        public string LastName { get; set; } = 0;
 
-        public DateTime BirthDate { get; set; }
-        public bool Gender { get; set; }
+        public DateTime BirthDate { get; set; } = 0;
+        public bool Gender { get; set; } = 0;
+
+        public IList<BookAuthorRefference> BookAuthors { get; set; } =
+            new List<BookAuthorRefference>();
     }
 }

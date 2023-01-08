@@ -52,15 +52,20 @@ namespace BooksAPI.Controllers
         }
 
         [HttpPost("CreateBook")]
-        public IActionResult CreateBook([FromBody] BookRefference req)
+        public IActionResult CreateBook([FromBody] BookRefference req, string FirstName,string LastName)
         {
-            Book book = new Book();
-            book.Id = _booksContext.Book.ToList().Count + 1;
-            book.Title = req.Title;
-            book.Description = req.Description;
-            book.Rating = req.Rating;
-            book.ISBN = req.ISBN;
-            book.PublicationDate = req.PublicationDate;
+            Book book = new Book()
+            {
+                Id = _booksContext.Book.ToList().Count + 1,
+                Title = req.Title,
+                Description = req.Description,
+                Rating = req.Rating,
+                ISBN = req.ISBN,
+                PublicationDate = req.PublicationDate
+            };
+            var Author = _booksContext.Author.FirstOrDefault(
+                    x => (FirstName == FirstName && LastName == LastName)
+            if (Author == null)
 
             try
             {
