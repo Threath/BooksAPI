@@ -1,6 +1,6 @@
-﻿using BooksAPI.Data;
-using BooksAPI.Models;
+﻿using BooksAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.Entity;
 
 namespace BooksAPI.Controllers
 {
@@ -52,21 +52,16 @@ namespace BooksAPI.Controllers
         }
 
         [HttpPost("CreateBook")]
-        public IActionResult CreateBook([FromBody] BookRefference req, string FirstName,string LastName)
+        public IActionResult CreateBook([FromBody] Book req)
         {
             Book book = new Book()
             {
-                Id = _booksContext.Book.ToList().Count + 1,
                 Title = req.Title,
                 Description = req.Description,
                 Rating = req.Rating,
                 ISBN = req.ISBN,
                 PublicationDate = req.PublicationDate
             };
-            var Author = _booksContext.Author.FirstOrDefault(
-                    x => (FirstName == FirstName && LastName == LastName)
-            if (Author == null)
-
             try
             {
                 _booksContext.Book.Add(book);
@@ -81,7 +76,7 @@ namespace BooksAPI.Controllers
         }
 
         [HttpPost("CreateAuthor")]
-        public IActionResult CreateAuthor([FromBody] AuthorRefference req)
+        public IActionResult CreateAuthor([FromBody] Author req)
         {
             Author author = new Author();
             author.Id = _booksContext.Author.ToList().Count + 1;
@@ -104,7 +99,7 @@ namespace BooksAPI.Controllers
         }
 
         [HttpPut("UpdateBook")]
-        public IActionResult UpdateBook([FromBody] BookRefference req)
+        public IActionResult UpdateBook([FromBody] Book req)
         {
             try
             {

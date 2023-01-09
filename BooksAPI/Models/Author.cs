@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BooksAPI.Data
+namespace BooksAPI.Models
 {
     public class Author
     {
@@ -12,5 +12,7 @@ namespace BooksAPI.Data
 
         public DateTime BirthDate { get; set; }
         public bool Gender { get; set; }
+
+        public virtual IList<BookAuthor> BookAuthors { get; set; }
     }
 }
