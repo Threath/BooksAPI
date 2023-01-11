@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Numerics;
 
 namespace BooksAPI.Models
@@ -10,6 +11,7 @@ namespace BooksAPI.Models
         public virtual Book Book { get; set; }
 
         public int AuthorId { get; set; }
+
         public virtual Author Author { get; set; }
     }
 }

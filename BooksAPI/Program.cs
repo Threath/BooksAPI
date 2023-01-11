@@ -1,10 +1,11 @@
 using BooksAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<BooksContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<BooksDbContext>(options => options.UseSqlServer(connectionString));
 
 // Add services to the container.
 

@@ -1,6 +1,11 @@
-﻿using BooksAPI.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using BooksAPI.Models;
 
 namespace BooksAPI.Controllers
 {
@@ -8,179 +13,183 @@ namespace BooksAPI.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private BooksContext _booksContext;
+        private readonly BooksDbContext _context;
 
-        public BooksController(BooksContext booksContext)
+        public BooksController(BooksDbContext context)
         {
-            _booksContext = booksContext;
+            _context = context;
         }
 
-        [HttpGet("GetBooks")]
-        public IActionResult GetBooks()
-        {
-            try
-            {
-                var books = _booksContext.Book.ToList();
-                if (books.Count == 0)
-                {
-                    return StatusCode(404, "There are no books");
-                }
-                return Ok(books);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex);
-            }
-        }
-
+        // GET: api/Authors
+        // Get all authors
         [HttpGet("GetAuthors")]
-        public IActionResult GetAuthors()
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
         {
+            if (_context.Authors == null)
+            {
+                return NotFound();
+            }
+            return await _context.Authors.ToListAsync();
+        }
+
+        // GET: api/Books
+        // Get all books
+        [HttpGet("GetBooks")]
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        {
+            if (_context.Books == null)
+            {
+                return NotFound();
+            }
+            return await _context.Books.ToListAsync();
+        }
+
+        // GET: api/Authors/5
+        [HttpGet("GetAuthor{FirstName}&&{LastName}")]
+        public async Task<ActionResult<Author>> GetAuthor(string FirstName, string LastName)
+        {
+            if (_context.Authors == null)
+            {
+                return NotFound();
+            }
+            var author = _context.Authors.FirstOrDefault(
+                x => x.FirstName == FirstName && x.LastName == LastName
+            );
+
+            if (author == null)
+            {
+                return NotFound();
+            }
+
+            return author;
+        }
+
+        // GET: api/Books/5
+        [HttpGet("GetBook{Isbn}")]
+        public async Task<ActionResult<Book>> GetBook(string Isbn)
+        {
+            if (_context.Books == null)
+            {
+                return NotFound();
+            }
+            var book = _context.Books.FirstOrDefault(x => Isbn == x.Isbn);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return book;
+        }
+
+        // POST: api/Authors
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("PostAuthor")]
+        public async Task<ActionResult<Author>> CreateAuthor(Author author)
+        {
+            if (_context.Authors == null)
+            {
+                return Problem("Entity set 'BooksDbContext.Authors'  is null.");
+            }
+            _context.Authors.Add(author);
             try
             {
-                var Authors = _booksContext.Author.ToList();
-                if (Authors.Count == 0)
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (AuthorExists(author.Id))
                 {
-                    return StatusCode(404, "AThere are no authors");
+                    return Conflict();
                 }
-                return Ok(Authors);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex);
-            }
-        }
-
-        [HttpPost("CreateBook")]
-        public IActionResult CreateBook([FromBody] Book req)
-        {
-            Book book = new Book()
-            {
-                Title = req.Title,
-                Description = req.Description,
-                Rating = req.Rating,
-                ISBN = req.ISBN,
-                PublicationDate = req.PublicationDate
-            };
-            try
-            {
-                _booksContext.Book.Add(book);
-                _booksContext.SaveChanges();
-                var books = _booksContext.Book.ToList();
-                return Ok(books);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex);
-            }
-        }
-
-        [HttpPost("CreateAuthor")]
-        public IActionResult CreateAuthor([FromBody] Author req)
-        {
-            Author author = new Author();
-            author.Id = _booksContext.Author.ToList().Count + 1;
-            author.FirstName = req.FirstName;
-            author.LastName = req.LastName;
-            author.BirthDate = req.BirthDate;
-            author.Gender = req.Gender;
-
-            try
-            {
-                _booksContext.Author.Add(author);
-                _booksContext.SaveChanges();
-                var Authors = _booksContext.Author.ToList();
-                return Ok(Authors);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex);
-            }
-        }
-
-        [HttpPut("UpdateBook")]
-        public IActionResult UpdateBook([FromBody] Book req)
-        {
-            try
-            {
-                var book = _booksContext.Book.FirstOrDefault(x => x.Id == req.Id);
-                if (book == null)
+                else
                 {
-                    return StatusCode(404, "book not found");
+                    throw;
                 }
-                book.Title = req.Title;
-                book.Description = req.Description;
-                book.Rating = req.Rating;
-                book.ISBN = req.ISBN;
-                book.PublicationDate = req.PublicationDate;
-                _booksContext.SaveChanges();
-                var books = _booksContext.Book.ToList();
-                return Ok(books);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex);
-            }
+
+            return CreatedAtAction("GetAuthors", author);
         }
 
-        [HttpDelete("DeleteBook/{Id}")]
-        public IActionResult DeleteBook([FromRoute] int Id)
+        // POST: api/Books
+        [HttpPost("PostBook")]
+        public async Task<ActionResult<Book>> CreateBook(Book book)
         {
+            if (_context.Books == null)
+            {
+                return Problem("Entity set 'BooksDbContext.Books'  is null.");
+            }
+            _context.Books.Add(book);
             try
             {
-                var book = _booksContext.Book.FirstOrDefault(x => x.Id == Id);
-                if (book == null)
-                {
-                    return StatusCode(404, "book not found");
-                }
-                _booksContext.Entry(book).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                _booksContext.SaveChanges();
-
-                var books = _booksContext.Book.ToList();
-                return Ok(books);
+                await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateException)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, "Failed to create a book");
             }
+
+            return CreatedAtAction("GetBooks", book);
         }
 
-        [HttpGet("GetAuthor/{FirstName}&&{LastName}")]
-        public IActionResult GetAuthorByName([FromRoute] string FirstName, string LastName)
+        // PUT: api/Books/5
+        [HttpPut("PutBook/{id}")]
+        public async Task<IActionResult> UpdateBook(int id, Book book)
         {
+            if (id != book.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(book).State = EntityState.Modified;
+
             try
             {
-                var author = _booksContext.Author.FirstOrDefault(
-                    x => (x.FirstName == FirstName && x.LastName == LastName)
-                );
-                if (author == null)
-                {
-                    return StatusCode(404, "No author is named: " + FirstName + " " + LastName);
-                }
-                return Ok(author);
+                await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException)
             {
-                return StatusCode(500, ex);
+                if (!BookExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return Ok();
         }
 
-        [HttpGet("GetBook/{Title}")]
-        public IActionResult GetBookByTitle([FromRoute] string Title)
+        // DELETE: api/Books/5
+        [HttpDelete("DeleteBook/{id}")]
+        public async Task<IActionResult> DeleteBook(int id)
         {
-            try
+            if (_context.Books == null)
             {
-                var book = _booksContext.Book.FirstOrDefault(x => x.Title == Title);
-                if (book == null)
-                {
-                    return StatusCode(404, "Book not found");
-                }
-                return Ok(book);
+                return NotFound();
             }
-            catch (Exception ex)
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
             {
-                return StatusCode(500, ex);
+                return NotFound();
             }
+
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        private bool AuthorExists(int id)
+        {
+            return (_context.Authors?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private bool BookExists(int id)
+        {
+            return (_context.Books?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
