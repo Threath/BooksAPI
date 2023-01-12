@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BooksAPI.Models;
 using BooksAPI.DTO;
 using Azure.Core;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Data.Entity;
 
 namespace BooksAPI.Controllers
 {
@@ -153,19 +155,16 @@ namespace BooksAPI.Controllers
             {
                 return Problem("Entity set 'BooksDbContext.Books'  is null.");
             }
+            if (_context.Book.Any(b => b.Isbn == request.Isbn))
+            {
+                return StatusCode(400, "Ksiazka o tym numerze ISBN juz istnieje");
+            }
 
-            Book book = new Book() {
-                Description = request.Description,
-                Title = request.Title,
-                PublicationDate = request.PublicationDate,
-                Isbn= request.Isbn,
-                Rating= request.Rating
-            };
             List<BookAuthor> authorList = new List<BookAuthor>();
 
             for (int i = 0; i < request.BookAuthors.Count(); ++i)
             {
-                Book book1 = new Book()
+                Book book = new Book()
                 {
                     Description = request.BookAuthors[i].Book.Description,
                     Title = request.BookAuthors[i].Book.Title,
@@ -180,36 +179,43 @@ namespace BooksAPI.Controllers
                     BirthDate = request.BookAuthors[i].Author.BirthDate,
                     Gender = request.BookAuthors[i].Author.Gender
                 };
-                BookAuthor bookauthor = new BookAuthor()
+                if(author==null)
                 {
-                    Author = author,
-                    Book = book1
-                };
-                authorList.Add(bookauthor);
-            }
-            book.BookAuthors = authorList;
+                    return StatusCode(400, "Podaj autora");
+                }
 
-            //verifying if the book has authors
-            //if (book.BookAuthors.All(p => p.Author == null))
-            //{
-            //    return StatusCode(400, "Dodaj autora");
-            //}
+                _context.Author.Add(author);
+                _context.Book.Add(book);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    return StatusCode(500, "Failed to create a book");
+                }
 
-            
-            //adding the book
-            _context.Book.Add(book);
+                book =  _context.Book.FirstOrDefault(b => b.Isbn == request.Isbn);
+                author =  _context.Author.FirstOrDefault(a => a.FirstName == request.BookAuthors[i].Author.FirstName && a.LastName == request.BookAuthors[i].Author.LastName);
 
-            try
-            {
+                BookAuthor bookAuthor = new BookAuthor();
+                bookAuthor.AuthorId = author.Id;
+                bookAuthor.BookId = book.Id;
+                _context.BookAuthor.Add(bookAuthor);
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                return StatusCode(500, "Failed to create a book");
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    return StatusCode(500, "Failed to create a book");
+                }
             }
 
-            return CreatedAtAction("GetBooks", book);
+            return CreatedAtAction("GetBooks", _context.Book.FirstOrDefault());
         }
+
 
         // PUT: api/Books/5
         [HttpPut("PutBook/{id}")]
@@ -220,7 +226,7 @@ namespace BooksAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(book).State = EntityState.Modified;
+            _context.Entry(book).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
             try
             {
