@@ -10,6 +10,8 @@ using BooksAPI.DTO;
 using Azure.Core;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Data.Entity;
+using Microsoft.Build.Framework;
+using System.ComponentModel.DataAnnotations;
 
 namespace BooksAPI.Controllers
 {
@@ -88,121 +90,125 @@ namespace BooksAPI.Controllers
 
         // POST: api/Author
         [HttpPost("PostAuthor")]
-        public async Task<ActionResult<Author>> CreateAuthor(CreateAuthorDTO request)
+        public async Task<ActionResult<Author>> CreateAuthor(AuthorDTO request)
         {
-            if (_context.Author == null)
+            //validate if none of the values are null
+            if (request.GetType().GetProperties().Any(prop => prop.GetValue(request) == null))
             {
-                return Problem("Entity set 'BooksDbContext.Author'  is null.");
+                return BadRequest("Thas a bad request");
             }
+
+            //create a new Author instance
             Author author = new Author()
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                Gender= request.Gender,
-                BirthDate= request.BirthDate
+                BirthDate = (DateTime)request.BirthDate,
+                Gender = (bool)request.Gender
             };
-            List<BookAuthor> authorList = new List<BookAuthor>(1) { };
-            int i = 0;
-            foreach (var bookAuthor in authorList)
-            {
-                Book book = new Book()
-                {
-                    Description = request.BookAuthors[i].Book.Description,
-                    Title = request.BookAuthors[i].Book.Title,
-                    PublicationDate = request.BookAuthors[i].Book.PublicationDate,
-                    Isbn = request.BookAuthors[i].Book.Isbn,
-                    Rating = request.BookAuthors[i].Book.Rating
-                };
-                Author author1 = new Author()
-                {
-                    FirstName = request.BookAuthors[i].Author.FirstName,
-                    LastName = request.BookAuthors[i].Author.LastName,
-                    BirthDate = request.BookAuthors[i].Author.BirthDate,
-                    Gender = request.BookAuthors[i].Author.Gender
-                };
-                bookAuthor.Author = author;
-                bookAuthor.Book = book;
-                i++;
-            }
-            author.BookAuthors = authorList;
 
             _context.Author.Add(author);
+
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (AuthorExists(author.Id))
+                return StatusCode(500, "Failed to create a book");
+            }
+            //if there are any books written by the author, add the FK relationship
+            if(request.BookAuthors.Count!=0)
+            {
+                for (int i = 0; i < request.BookAuthors.Count(); ++i)
                 {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
+                    //retrieve the BookId from the db
+                    int BookId = _context.Book.FirstOrDefault(b => request.BookAuthors[i].Book.Isbn == b.Isbn).Id;
+                    //retrieve AuthorId from the db
+                    int AuthorId = _context.Author.FirstOrDefault(a => (request.FirstName == a.FirstName && request.LastName == a.LastName)).Id;
+
+                    BookAuthor bookAuthor = new BookAuthor();
+                    bookAuthor.AuthorId = AuthorId;
+                    bookAuthor.BookId = BookId;
+                    _context.BookAuthor.Add(bookAuthor);
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        return StatusCode(500, "Failed to create a book");
+                    }
+
                 }
             }
-
-            return CreatedAtAction("GetAuthor", author);
+          
+            return CreatedAtAction("GetBooks", _context.Author.FirstOrDefault());
         }
 
         // POST: api/Books
         //it works but it's ugly
         [HttpPost("PostBook")]
-        public async Task<ActionResult<Book>> CreateBook(CreateBookDTO request)
+        public async Task<ActionResult<Book>> CreateBook(BookDTO request)
         {
-            if (_context.Book == null)
+            //check if any book property is a null
+            if(request.GetType().GetProperties().Any(prop=>prop.GetValue(request)==null))
             {
-                return Problem("Entity set 'BooksDbContext.Books'  is null.");
+                return BadRequest("Thas a bad request");
             }
+
+            //validate if the authors were input
+            if (request.BookAuthors.All(ba=>(ba.Author.FirstName==null&&ba.Author.LastName == null)))
+            {
+                return BadRequest("Dodaj authora");
+            }
+
+            //validate if the authors exist in the db
+            if(!request.BookAuthors.All(ba => _context.Author.Any(a=>(a.FirstName==ba.Author.FirstName&&a.LastName==ba.Author.LastName))))
+            {
+                return BadRequest("Ci authorzy nie istnieja");
+            }
+
+            //validate if the ISBN exists
             if (_context.Book.Any(b => b.Isbn == request.Isbn))
             {
-                return StatusCode(400, "Ksiazka o tym numerze ISBN juz istnieje");
+                return BadRequest("Ksiazka o tym numerze ISBN juz istnieje");
             }
 
-            List<BookAuthor> authorList = new List<BookAuthor>();
-
-            for (int i = 0; i < request.BookAuthors.Count(); ++i)
+            //create new book instance
+            Book book = new Book()
             {
-                Book book = new Book()
-                {
-                    Description = request.BookAuthors[i].Book.Description,
-                    Title = request.BookAuthors[i].Book.Title,
-                    PublicationDate = request.BookAuthors[i].Book.PublicationDate,
-                    Isbn = request.BookAuthors[i].Book.Isbn,
-                    Rating = request.BookAuthors[i].Book.Rating
-                };
-                Author author = new Author()
-                {
-                    FirstName = request.BookAuthors[i].Author.FirstName,
-                    LastName = request.BookAuthors[i].Author.LastName,
-                    BirthDate = request.BookAuthors[i].Author.BirthDate,
-                    Gender = request.BookAuthors[i].Author.Gender
-                };
-                if(author==null)
-                {
-                    return StatusCode(400, "Podaj autora");
-                }
+                Description = request.Description,
+                Title = request.Title,
+                PublicationDate = (DateTime)request.PublicationDate,
+                Isbn = request.Isbn,
+                Rating = (int)request.Rating
+            };
+            _context.Book.Add(book);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, "Failed to create a book");
+            }
 
-                _context.Author.Add(author);
-                _context.Book.Add(book);
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateException)
-                {
-                    return StatusCode(500, "Failed to create a book");
-                }
+            //for each author create new FK record
+            for (int i = 0;i < request.BookAuthors.Count() ; ++i)
+            {
 
-                book =  _context.Book.FirstOrDefault(b => b.Isbn == request.Isbn);
-                author =  _context.Author.FirstOrDefault(a => a.FirstName == request.BookAuthors[i].Author.FirstName && a.LastName == request.BookAuthors[i].Author.LastName);
+                //Find Id of the newly added book from db
+                int BookId = _context.Book.FirstOrDefault(b => b.Isbn == request.Isbn).Id;
+                //find the Id of the author from request
+                int AuthorId = _context.Author.FirstOrDefault(a => (request.BookAuthors[i].Author.FirstName == a.FirstName) && (request.BookAuthors[i].Author.LastName == a.LastName)).Id;
 
                 BookAuthor bookAuthor = new BookAuthor();
-                bookAuthor.AuthorId = author.Id;
-                bookAuthor.BookId = book.Id;
+                bookAuthor.AuthorId = AuthorId;
+                bookAuthor.BookId = BookId;
                 _context.BookAuthor.Add(bookAuthor);
-                await _context.SaveChangesAsync();
+
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -212,21 +218,26 @@ namespace BooksAPI.Controllers
                     return StatusCode(500, "Failed to create a book");
                 }
             }
-
             return CreatedAtAction("GetBooks", _context.Book.FirstOrDefault());
         }
 
 
         // PUT: api/Books/5
         [HttpPut("PutBook/{id}")]
-        public async Task<IActionResult> UpdateBook(int id, Book book)
+        public async Task<IActionResult> UpdateBook(int id, BookDTO request)
         {
-            if (id != book.Id)
+            //check if any book property is a null
+            if (request.GetType().GetProperties().Any(prop => prop.GetValue(request) == null))
             {
-                return BadRequest();
+                return BadRequest("Thas a bad request");
+            }
+            //validate if the ISBN exists
+            if (_context.Book.Any(b => b.Isbn != request.Isbn))
+            {
+                return BadRequest("Ksiazka o tym numerze ISBN juz istnieje");
             }
 
-            _context.Entry(book).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Entry(request).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
             try
             {
@@ -255,12 +266,38 @@ namespace BooksAPI.Controllers
             {
                 return NotFound();
             }
+
             var book = await _context.Book.FindAsync(id);
             if (book == null)
             {
                 return NotFound();
             }
 
+            int quantity = _context.BookAuthor.Where(ba=>ba.BookId == id).Count();
+            //delete all FK links
+            for(int i = 0; i < quantity;++i)
+            {
+                //find the Id of the FK
+                int BookId = _context.BookAuthor.FirstOrDefault(ba => ba.BookId == id).BookId;
+                //Find first FK with the Id
+                var bookAuthor =  _context.BookAuthor.FirstOrDefault(ba=> ba.BookId == BookId);
+                if (bookAuthor == null)
+                {
+                    return NotFound();
+                }
+                _context.BookAuthor.Remove(bookAuthor);
+                
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+
+                    return StatusCode(500, "failed to delete the book");
+                }
+            }    
+            //delete the object
             _context.Book.Remove(book);
             await _context.SaveChangesAsync();
 

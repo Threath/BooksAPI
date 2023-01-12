@@ -5,8 +5,8 @@ namespace BooksAPI.DTO
 {
     public class CreateBookAuthorDTO
     {
-        public virtual CreateBookDTO Book { get; set; }
+        public virtual BookDTO? Book { get; set; }
 
-        public virtual CreateAuthorDTO Author { get; set; }
+        public virtual AuthorDTO? Author { get; set; }
     }
 }
