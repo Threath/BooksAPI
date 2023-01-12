@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Numerics;
+using System.Runtime.Serialization;
 
 namespace BooksAPI.Models
 {

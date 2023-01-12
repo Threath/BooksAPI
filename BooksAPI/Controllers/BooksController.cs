@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BooksAPI.Models;
+using BooksAPI.DTO;
+using Azure.Core;
 
 namespace BooksAPI.Controllers
 {
@@ -20,16 +22,16 @@ namespace BooksAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Authors
-        // Get all authors
-        [HttpGet("GetAuthors")]
-        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+        // GET: api/Author
+        // Get all Author
+        [HttpGet("GetAuthor")]
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthor()
         {
-            if (_context.Authors == null)
+            if (_context.Author == null)
             {
                 return NotFound();
             }
-            return await _context.Authors.ToListAsync();
+            return await _context.Author.ToListAsync();
         }
 
         // GET: api/Books
@@ -37,22 +39,22 @@ namespace BooksAPI.Controllers
         [HttpGet("GetBooks")]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            if (_context.Books == null)
+            if (_context.Book == null)
             {
                 return NotFound();
             }
-            return await _context.Books.ToListAsync();
+            return await _context.Book.ToListAsync();
         }
 
-        // GET: api/Authors/5
+        // GET: api/Author/5
         [HttpGet("GetAuthor{FirstName}&&{LastName}")]
         public async Task<ActionResult<Author>> GetAuthor(string FirstName, string LastName)
         {
-            if (_context.Authors == null)
+            if (_context.Author == null)
             {
                 return NotFound();
             }
-            var author = _context.Authors.FirstOrDefault(
+            var author = _context.Author.FirstOrDefault(
                 x => x.FirstName == FirstName && x.LastName == LastName
             );
 
@@ -68,11 +70,11 @@ namespace BooksAPI.Controllers
         [HttpGet("GetBook{Isbn}")]
         public async Task<ActionResult<Book>> GetBook(string Isbn)
         {
-            if (_context.Books == null)
+            if (_context.Book == null)
             {
                 return NotFound();
             }
-            var book = _context.Books.FirstOrDefault(x => Isbn == x.Isbn);
+            var book = _context.Book.FirstOrDefault(x => Isbn == x.Isbn);
 
             if (book == null)
             {
@@ -82,16 +84,47 @@ namespace BooksAPI.Controllers
             return book;
         }
 
-        // POST: api/Authors
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/Author
         [HttpPost("PostAuthor")]
-        public async Task<ActionResult<Author>> CreateAuthor(Author author)
+        public async Task<ActionResult<Author>> CreateAuthor(CreateAuthorDTO request)
         {
-            if (_context.Authors == null)
+            if (_context.Author == null)
             {
-                return Problem("Entity set 'BooksDbContext.Authors'  is null.");
+                return Problem("Entity set 'BooksDbContext.Author'  is null.");
             }
-            _context.Authors.Add(author);
+            Author author = new Author()
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Gender= request.Gender,
+                BirthDate= request.BirthDate
+            };
+            List<BookAuthor> authorList = new List<BookAuthor>(1) { };
+            int i = 0;
+            foreach (var bookAuthor in authorList)
+            {
+                Book book = new Book()
+                {
+                    Description = request.BookAuthors[i].Book.Description,
+                    Title = request.BookAuthors[i].Book.Title,
+                    PublicationDate = request.BookAuthors[i].Book.PublicationDate,
+                    Isbn = request.BookAuthors[i].Book.Isbn,
+                    Rating = request.BookAuthors[i].Book.Rating
+                };
+                Author author1 = new Author()
+                {
+                    FirstName = request.BookAuthors[i].Author.FirstName,
+                    LastName = request.BookAuthors[i].Author.LastName,
+                    BirthDate = request.BookAuthors[i].Author.BirthDate,
+                    Gender = request.BookAuthors[i].Author.Gender
+                };
+                bookAuthor.Author = author;
+                bookAuthor.Book = book;
+                i++;
+            }
+            author.BookAuthors = authorList;
+
+            _context.Author.Add(author);
             try
             {
                 await _context.SaveChangesAsync();
@@ -108,18 +141,64 @@ namespace BooksAPI.Controllers
                 }
             }
 
-            return CreatedAtAction("GetAuthors", author);
+            return CreatedAtAction("GetAuthor", author);
         }
 
         // POST: api/Books
+        //it works but it's ugly
         [HttpPost("PostBook")]
-        public async Task<ActionResult<Book>> CreateBook(Book book)
+        public async Task<ActionResult<Book>> CreateBook(CreateBookDTO request)
         {
-            if (_context.Books == null)
+            if (_context.Book == null)
             {
                 return Problem("Entity set 'BooksDbContext.Books'  is null.");
             }
-            _context.Books.Add(book);
+
+            Book book = new Book() {
+                Description = request.Description,
+                Title = request.Title,
+                PublicationDate = request.PublicationDate,
+                Isbn= request.Isbn,
+                Rating= request.Rating
+            };
+            List<BookAuthor> authorList = new List<BookAuthor>();
+
+            for (int i = 0; i < request.BookAuthors.Count(); ++i)
+            {
+                Book book1 = new Book()
+                {
+                    Description = request.BookAuthors[i].Book.Description,
+                    Title = request.BookAuthors[i].Book.Title,
+                    PublicationDate = request.BookAuthors[i].Book.PublicationDate,
+                    Isbn = request.BookAuthors[i].Book.Isbn,
+                    Rating = request.BookAuthors[i].Book.Rating
+                };
+                Author author = new Author()
+                {
+                    FirstName = request.BookAuthors[i].Author.FirstName,
+                    LastName = request.BookAuthors[i].Author.LastName,
+                    BirthDate = request.BookAuthors[i].Author.BirthDate,
+                    Gender = request.BookAuthors[i].Author.Gender
+                };
+                BookAuthor bookauthor = new BookAuthor()
+                {
+                    Author = author,
+                    Book = book1
+                };
+                authorList.Add(bookauthor);
+            }
+            book.BookAuthors = authorList;
+
+            //verifying if the book has authors
+            //if (book.BookAuthors.All(p => p.Author == null))
+            //{
+            //    return StatusCode(400, "Dodaj autora");
+            //}
+
+            
+            //adding the book
+            _context.Book.Add(book);
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -166,17 +245,17 @@ namespace BooksAPI.Controllers
         [HttpDelete("DeleteBook/{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
-            if (_context.Books == null)
+            if (_context.Book == null)
             {
                 return NotFound();
             }
-            var book = await _context.Books.FindAsync(id);
+            var book = await _context.Book.FindAsync(id);
             if (book == null)
             {
                 return NotFound();
             }
 
-            _context.Books.Remove(book);
+            _context.Book.Remove(book);
             await _context.SaveChangesAsync();
 
             return Ok();
@@ -184,12 +263,12 @@ namespace BooksAPI.Controllers
 
         private bool AuthorExists(int id)
         {
-            return (_context.Authors?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Author?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
         private bool BookExists(int id)
         {
-            return (_context.Books?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Book?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

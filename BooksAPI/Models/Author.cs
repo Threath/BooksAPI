@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace BooksAPI.Models;
 
@@ -14,6 +16,6 @@ public class Author
     public DateTime BirthDate { get; set; }
 
     public bool Gender { get; set; }
-
+    [JsonIgnore]
     public IList<BookAuthor> BookAuthors { get; set; }
 }

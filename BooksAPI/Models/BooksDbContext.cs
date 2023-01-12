@@ -10,15 +10,20 @@ public class BooksDbContext : DbContext
 
     public BooksDbContext(DbContextOptions<BooksDbContext> options) : base(options) { }
 
-    public virtual DbSet<Author> Authors { get; set; }
+    public virtual DbSet<Author> Author { get; set; }
 
-    public virtual DbSet<Book> Books { get; set; }
+    public virtual DbSet<Book> Book { get; set; }
+
+    public virtual DbSet<BookAuthor> BookAuthor { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Author>(entity =>
         {
             entity.HasKey(a => a.Id);
+
+            entity.Property(b => b.Id)
+            .ValueGeneratedOnAdd();
 
             entity.Property(a => a.FirstName).HasMaxLength(50);
             entity.Property(a => a.LastName).HasMaxLength(50);
@@ -27,6 +32,9 @@ public class BooksDbContext : DbContext
         modelBuilder.Entity<Book>(entity =>
         {
             entity.HasKey(b => b.Id);
+
+            entity.Property(b => b.Id)
+            .ValueGeneratedOnAdd();
 
             entity.Property(b => b.Isbn).HasMaxLength(13).HasColumnName("ISBN");
             entity.Property(b => b.Rating).HasColumnType("decimal(18, 0)");
@@ -41,10 +49,17 @@ public class BooksDbContext : DbContext
                 .HasOne<Book>(ba => ba.Book)
                 .WithMany(ba => ba.BookAuthors)
                 .HasForeignKey(ba => ba.BookId);
+
             entity
                 .HasOne<Author>(ba => ba.Author)
                 .WithMany(ba => ba.BookAuthors)
                 .HasForeignKey(ba => ba.BookId);
+
+            entity.Property(ba => ba.BookId)
+                .ValueGeneratedOnAdd();
+
+            entity.Property(ba => ba.AuthorId)
+                .ValueGeneratedOnAdd();
         });
     }
 }
