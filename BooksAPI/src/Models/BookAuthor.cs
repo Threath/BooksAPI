@@ -1,4 +1,4 @@
-﻿namespace BooksAPI.Models
+﻿namespace BooksAPI.src.Models
 {
     public class BookAuthor
     {

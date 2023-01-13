@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using BooksAPI.src.Api.DTO;
+using BooksAPI.src.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BooksAPI.Models;
-using BooksAPI.DTO;
-using Azure.Core;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Build.Framework;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BooksAPI.Controllers
+namespace BooksAPI.src.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -109,8 +100,6 @@ namespace BooksAPI.Controllers
             //for each author create new FK record
             for (int i = 0; i < request.AuthorsIds.Count(); ++i)
             {
-
-                
                 //find the Id of the author from request
                 int AuthorId = request.AuthorsIds[i];
 
@@ -128,18 +117,16 @@ namespace BooksAPI.Controllers
                     return StatusCode(500, "Failed to create a book");
                 }
             }
-            
+
             return StatusCode(201);
         }
-
-
 
         // PUT: api/Books/5
         [HttpPut("PutBook/{id}")]
         public async Task<IActionResult> UpdateBook(int id, BookDTO request)
         {
             //check if any book property is a null, this is super ugly, dunno how to validate every property except one
-            if(request.Isbn==null|| request.PublicationDate == null|| request.Title == null|| request.Description == null|| request.Rating == null)
+            if (request.Isbn == null || request.PublicationDate == null || request.Title == null || request.Description == null || request.Rating == null)
             {
                 return BadRequest("Wypelnij wszystkie wymagane pola");
             }
@@ -153,9 +140,9 @@ namespace BooksAPI.Controllers
             book.Description = request.Description;
             book.Isbn = request.Isbn;
             book.PublicationDate = (DateTime)request.PublicationDate;
-            book.Rating = (Decimal)request.Rating;
+            book.Rating = (decimal)request.Rating;
 
-            _context.Entry(book).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Entry(book).State = EntityState.Modified;
 
             try
             {
@@ -211,7 +198,6 @@ namespace BooksAPI.Controllers
                 }
                 catch (DbUpdateException)
                 {
-
                     return StatusCode(500, "failed to delete the book");
                 }
             }

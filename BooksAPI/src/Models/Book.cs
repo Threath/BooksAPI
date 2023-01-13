@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BooksAPI.Models;
+namespace BooksAPI.src.Models;
 
 public class Book
 {

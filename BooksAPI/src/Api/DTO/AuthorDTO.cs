@@ -1,4 +1,4 @@
-﻿namespace BooksAPI.DTO
+﻿namespace BooksAPI.src.Api.DTO
 {
     public class AuthorDTO
     {

@@ -1,9 +1,9 @@
-﻿using BooksAPI.DTO;
-using BooksAPI.Models;
+﻿using BooksAPI.src.Api.DTO;
+using BooksAPI.src.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace BooksAPI.Controllers
+namespace BooksAPI.src.Api.Controllers
 {
     [Route("api/Books")]
     [ApiController]
@@ -52,7 +52,7 @@ namespace BooksAPI.Controllers
                 return NotFound();
             }
 
-             return author;
+            return author;
         }
 
         // POST: api/Author
@@ -60,11 +60,11 @@ namespace BooksAPI.Controllers
         public async Task<ActionResult<Author>> CreateAuthor(AuthorDTO request)
         {
             //validate if none of the values are null, didnt know how to exclude one property from a condition
-            if (request.BirthDate==null||request.FirstName==null||request.LastName==null||request.Gender==null)
+            if (request.BirthDate == null || request.FirstName == null || request.LastName == null || request.Gender == null)
             {
                 return BadRequest("Wypelnij wszystkie rekordy");
             }
-            if(_context.Author.Any(a=> request.FirstName == a.FirstName&&request.LastName==a.LastName))
+            if (_context.Author.Any(a => request.FirstName == a.FirstName && request.LastName == a.LastName))
             {
                 return BadRequest("Taki autor juz istnieje");
             }
@@ -89,17 +89,16 @@ namespace BooksAPI.Controllers
                 return StatusCode(500, "Failed to create an author");
             }
             //if there are any books added by query, add the FK relationship, AND VALIDATE THEIR IDs first
-            if(request.BooksIds != null)
+            if (request.BooksIds != null)
             {
-                if (request.BooksIds.Count != 0&&!request.BooksIds.All(ba => _context.Author.Any(a => a.Id == ba)))
+                if (request.BooksIds.Count != 0 && !request.BooksIds.All(ba => _context.Author.Any(a => a.Id == ba)))
                 {
-
                     for (int i = 0; i < request.BooksIds.Count(); ++i)
                     {
                         //retrieve the BookId from the db
                         int BookId = request.BooksIds[i];
                         //retrieve AuthorId from the db
-                        int AuthorId = _context.Author.FirstOrDefault(a => (request.FirstName == a.FirstName && request.LastName == a.LastName)).Id;
+                        int AuthorId = _context.Author.FirstOrDefault(a => request.FirstName == a.FirstName && request.LastName == a.LastName).Id;
 
                         BookAuthor bookAuthor = new BookAuthor();
                         bookAuthor.AuthorId = AuthorId;

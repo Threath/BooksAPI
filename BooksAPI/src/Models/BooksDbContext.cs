@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace BooksAPI.Models;
+namespace BooksAPI.src.Models;
 
 public class BooksDbContext : DbContext
 {
@@ -47,12 +47,12 @@ public class BooksDbContext : DbContext
             entity.HasKey(ba => new { ba.BookId, ba.AuthorId });
 
             entity
-                .HasOne<Book>(ba => ba.Book)
+                .HasOne(ba => ba.Book)
                 .WithMany(ba => ba.BookAuthors)
                 .HasForeignKey(ba => ba.BookId);
 
             entity
-                .HasOne<Author>(ba => ba.Author)
+                .HasOne(ba => ba.Author)
                 .WithMany(ba => ba.BookAuthors)
                 .HasForeignKey(ba => ba.BookId);
 
