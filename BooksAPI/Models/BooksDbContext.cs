@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace BooksAPI.Models;
 
 public class BooksDbContext : DbContext
 {
-    public BooksDbContext() { }
+    public BooksDbContext()
+    { }
 
-    public BooksDbContext(DbContextOptions<BooksDbContext> options) : base(options) { }
+    public BooksDbContext(DbContextOptions<BooksDbContext> options) : base(options)
+    {
+    }
 
     public virtual DbSet<Author> Author { get; set; }
 

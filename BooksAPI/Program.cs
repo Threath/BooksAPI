@@ -1,6 +1,6 @@
 using BooksAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();

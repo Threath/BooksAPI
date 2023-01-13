@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Numerics;
-using System.Runtime.Serialization;
-
-namespace BooksAPI.Models
+﻿namespace BooksAPI.Models
 {
     public class BookAuthor
     {

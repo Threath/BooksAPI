@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace BooksAPI.Models;
 
@@ -18,6 +15,7 @@ public class Book
     public string Isbn { get; set; } = null!;
 
     public DateTime PublicationDate { get; set; }
+
     [JsonIgnore]
     public IList<BookAuthor> BookAuthors { get; set; }
 }
