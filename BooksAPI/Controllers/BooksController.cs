@@ -222,11 +222,6 @@ namespace BooksAPI.Controllers
             return Ok();
         }
 
-        private bool AuthorExists(int id)
-        {
-            return (_context.Author?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-
         private bool BookExists(int id)
         {
             return (_context.Book?.Any(e => e.Id == id)).GetValueOrDefault();

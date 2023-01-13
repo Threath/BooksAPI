@@ -62,7 +62,7 @@ namespace BooksAPI.Controllers
             //validate if none of the values are null, didnt know how to exclude one property from a condition
             if (request.BirthDate==null||request.FirstName==null||request.LastName==null||request.Gender==null)
             {
-                return BadRequest("Thats a bad request");
+                return BadRequest("Wypelnij wszystkie rekordy");
             }
             if(_context.Author.Any(a=> request.FirstName == a.FirstName&&request.LastName==a.LastName))
             {
