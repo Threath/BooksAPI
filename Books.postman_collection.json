@@ -1,0 +1,1156 @@
+{
+	"info": {
+		"_postman_id": "d38c7a16-9c53-4851-9487-b419ab5bbde6",
+		"name": "Books",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20684585"
+	},
+	"item": [
+		{
+			"name": "Get Author by name - GET",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44380/api/Books/GetAuthor/Adam&&Mickiewicz",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44380",
+					"path": [
+						"api",
+						"Books",
+						"GetAuthor",
+						"Adam&&Mickiewicz"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Author by name - GET 2nd one",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/GetAuthor/Adam&&Mickiewicz",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"GetAuthor",
+								"Adam&&Mickiewicz"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:18:40 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 285,\n    \"firstName\": \"Adam\",\n    \"lastName\": \"Mickiewicz\",\n    \"birthDate\": \"2023-01-12T20:44:20.056\",\n    \"gender\": true,\n    \"bookAuthors\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Get all Books - GET",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44380/api/Books/GetBooks",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44380",
+					"path": [
+						"api",
+						"Books",
+						"GetBooks"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get all Books - GET",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/GetBooks",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"GetBooks"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:10:12 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 171,\n        \"title\": \"Doom Eternal OST\",\n        \"description\": \"Yes\",\n        \"rating\": 10,\n        \"isbn\": \"string\",\n        \"publicationDate\": \"2023-01-13T20:56:46.479\",\n        \"bookAuthors\": null\n    }\n]"
+				},
+				{
+					"name": "Get all Books - GET after modifying a record",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/GetBooks",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"GetBooks"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:11:43 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 171,\n        \"title\": \"Doom Eternal OST\",\n        \"description\": \"Yes\",\n        \"rating\": 10,\n        \"isbn\": \"999999\",\n        \"publicationDate\": \"2023-01-13T20:56:46.479\",\n        \"bookAuthors\": null\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get all Authors - GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44380/api/Books/GetAuthors",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44380",
+					"path": [
+						"api",
+						"Books",
+						"GetAuthors"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get all Authors - GET",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44380/api/Books/GetAuthors",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"GetAuthors"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:10:38 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 284,\n        \"firstName\": \"Mick\",\n        \"lastName\": \"Gordon\",\n        \"birthDate\": \"2023-01-12T20:44:20.056\",\n        \"gender\": true,\n        \"bookAuthors\": null\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get a book by ISBN",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44380/api/Books/GetBook/9789332500297",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44380",
+					"path": [
+						"api",
+						"Books",
+						"GetBook",
+						"9789332500297"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get a book by ISBN",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44380/api/Books/GetBook/999999",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"GetBook",
+								"999999"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:15:16 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 171,\n    \"title\": \"Doom Eternal OST\",\n    \"description\": \"Yes\",\n    \"rating\": 10,\n    \"isbn\": \"999999\",\n    \"publicationDate\": \"2023-01-13T20:56:46.479\",\n    \"bookAuthors\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Create Author - POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"K.V.N.\",\r\n  \"lastName\": \"Sunitha\",\r\n  \"birthDate\": \"2023-01-12T20:44:20.056Z\",\r\n  \"gender\": true,\r\n  \"bookAuthors\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44380/api/Books/PostAuthor",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44380",
+					"path": [
+						"api",
+						"Books",
+						"PostAuthor"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create Author - POST",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Adam\",\r\n  \"lastName\": \"Mickiewicz\",\r\n  \"birthDate\": \"2023-01-12T20:44:20.056Z\",\r\n  \"gender\": true,\r\n  \"bookAuthors\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PostAuthor",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PostAuthor"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:18:02 GMT"
+						}
+					],
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Create Author - POST - when a null is in one of the fields",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Adam\",\r\n  \"birthDate\": \"2023-01-12T20:44:20.056Z\",\r\n  \"gender\": true,\r\n  \"bookAuthors\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PostAuthor",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PostAuthor"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:20:44 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Wypelnij wszystkie rekordy"
+				},
+				{
+					"name": "Create Author - POST - when an author of the same name & last name is input",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Adam\",\r\n  \"lastName\": \"Mickiewicz\",\r\n  \"birthDate\": \"2023-01-12T20:44:20.056Z\",\r\n  \"gender\": true,\r\n  \"bookAuthors\": [\r\n      100000\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PostAuthor",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PostAuthor"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:21:28 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Taki autor juz istnieje"
+				}
+			]
+		},
+		{
+			"name": "Create a book - POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Compiler Construction\",\r\n  \"description\": \" PEARSON INDIA; 1st edition (January 1, 2013)\",\r\n  \"rating\": 0,\r\n  \"isbn\": \"9789332500297\",\r\n  \"publicationDate\": \"2023-01-10T18:25:26.608Z\",\r\n  \"bookAuthors\": [\r\n    {\r\n      \"author\": {\r\n        \"firstName\": \"K.V.N.\",\r\n        \"lastName\": \"Sunitha\"\r\n        }\r\n    }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44380/api/Books/PostBook",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44380",
+					"path": [
+						"api",
+						"Books",
+						"PostBook"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create a book - POST",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Doom Eternal OST\",\r\n  \"description\": \"Yes\",\r\n  \"rating\": 10,\r\n  \"isbn\": \"string\",\r\n  \"publicationDate\": \"2023-01-13T20:56:46.479Z\",\r\n  \"authorsIds\": [\r\n    284\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PostBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PostBook"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 20:57:35 GMT"
+						}
+					],
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Create a book - POST - when an author doesnt exist in db",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Doom Eternal OST\",\r\n  \"description\": \"Yes\",\r\n  \"rating\": 10,\r\n  \"isbn\": \"string\",\r\n  \"publicationDate\": \"2023-01-13T20:56:46.479Z\",\r\n  \"authorsIds\": [\r\n    1000\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PostBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PostBook"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:23:39 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Ci authorzy nie istnieja"
+				},
+				{
+					"name": "Create a book - POST - when inputting null in one of the fields",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Doom Eternal OST\",\r\n  \"description\": \"Yes\",\r\n  \"rating\": 10,\r\n  \"isbn\": \"string\",\r\n  \"authorsIds\": [\r\n    285\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PostBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PostBook"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:24:47 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Wypelnij wszystkie wymagane miejsca"
+				},
+				{
+					"name": "Create a book - POST - when author is not input",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Doom Eternal OST\",\r\n  \"description\": \"Yes\",\r\n  \"rating\": 10,\r\n  \"isbn\": \"string\",\r\n  \"publicationDate\": \"2023-01-13T20:56:46.479Z\",\r\n  \"authorsIds\": [\r\n\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PostBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PostBook"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:26:06 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Dodaj authora"
+				},
+				{
+					"name": "Create a book - POST - when inputting an ISBN that exists in DB",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Doom Eternal OST\",\r\n  \"description\": \"Yes\",\r\n  \"rating\": 10,\r\n  \"isbn\": \"string\",\r\n  \"publicationDate\": \"2023-01-13T20:56:46.479Z\",\r\n  \"authorsIds\": [\r\n    285\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PostBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PostBook"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:27:00 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Ksiazka o tym numerze ISBN juz istnieje"
+				}
+			]
+		},
+		{
+			"name": "Update a book - PUT",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"string\",\r\n  \"description\": \"string\",\r\n  \"rating\": 0,\r\n  \"isbn\": \"97893327777\",\r\n  \"publicationDate\": \"2023-01-10T18:25:26.608Z\",\r\n  \"bookAuthors\": [\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44380/api/Books/PutBook/112",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44380",
+					"path": [
+						"api",
+						"Books",
+						"PutBook",
+						"112"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Update a book - PUT",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Doom Eternal OST\",\r\n  \"description\": \"Yes\",\r\n  \"rating\": 10,\r\n  \"isbn\": \"999999\",\r\n  \"publicationDate\": \"2023-01-13T20:56:46.479Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PutBook/171",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PutBook",
+								"171"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:10:21 GMT"
+						}
+					],
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Update a book - PUT - when not all fields are filled",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Doom Eternal OST\",\r\n  \"description\": \"Yes\",\r\n  \"rating\": 10,\r\n  \"publicationDate\": \"2023-01-13T20:56:46.479Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PutBook/172",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PutBook",
+								"172"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:27:52 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Wypelnij wszystkie wymagane pola"
+				},
+				{
+					"name": "Update a book - PUT - when inputting an ISBN that exists in db",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Doom Eternal OST\",\r\n  \"description\": \"Yes\",\r\n  \"rating\": 10,\r\n  \"isbn\": \"string\",\r\n  \"publicationDate\": \"2023-01-13T20:56:46.479Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44380/api/Books/PutBook/172",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"PutBook",
+								"172"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:28:24 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Ksiazka o tym numerze ISBN juz istnieje"
+				}
+			]
+		},
+		{
+			"name": "Delete a book - DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44380/api/Books/DeleteBook/112",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44380",
+					"path": [
+						"api",
+						"Books",
+						"DeleteBook",
+						"112"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Delete a book - DELETE",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44380/api/Books/DeleteBook/171",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44380",
+							"path": [
+								"api",
+								"Books",
+								"DeleteBook",
+								"171"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 13 Jan 2023 21:17:11 GMT"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	]
+}
