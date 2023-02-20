@@ -1,4 +1,4 @@
-# intive-patronage
+# BooksAPI
 API for Books database
 
 Made in database first approach
